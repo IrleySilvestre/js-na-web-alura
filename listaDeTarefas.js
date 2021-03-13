@@ -1,57 +1,38 @@
-(() => {
+import BotaoExcluir from './content/excluirTarefa.js'
+import BotaoConcluir from './content/concluirTarefa.js'
 
-    const criarTarefa = (evento) => {
+const handleNovoItem = (evento)=>{
+    evento.preventDefault()
+    const lista = document.querySelector('[data-list]')
+    const input = document.querySelector('[data-form-input]')
+    const valor = input.value
+    const calendario = document.querySelector('[data-form-date]')
+    const data = moment(calendario.value)
+    const dataTarefa = (data.format('DD / MM / YYYY HH:mm' ))
 
-        evento.preventDefault()
-
-        const lista = document.querySelector('[data-list]')
-        const input = document.querySelector('[data-form-input]')
-        const valor = input.value
-
-        const tarefa = document.createElement('li')
-        tarefa.classList.add('task')
-        const conteudo = `<p class="content">${valor}</p>`
-
-        tarefa.innerHTML = conteudo
-
-        tarefa.appendChild(BotaoConcluir())
-        tarefa.appendChild(BotaoExcluir())
-        lista.appendChild(tarefa)
-        input.value = " "
-
+    const dados = {
+        valor,
+        dataTarefa
     }
-    const novaTarefa = document.querySelector('[data-form-button]')
+    const criaTarefa = criarTarefa(dados)
+    lista.appendChild(criaTarefa)
+    input.value = " "
 
-    novaTarefa.addEventListener('click', criarTarefa)
+}
 
-    const BotaoConcluir = () => {
-        const btnconcluir = document.createElement('button')
-        btnconcluir.addEventListener('click', concluirTarefa)
-        btnconcluir.classList.add('check-button')
-        btnconcluir.innerText = 'Concluir'
-        return btnconcluir
-    }
+const criarTarefa = ({valor, dataTarefa}) => {
+    const tarefa = document.createElement('li')
+    tarefa.classList.add('task')
+    const conteudo = `<p class="content">${dataTarefa} ${valor}</p>`
+    tarefa.innerHTML = conteudo
+    tarefa.appendChild(BotaoConcluir())
+    tarefa.appendChild(BotaoExcluir())
+    return tarefa
+}
+const novaTarefa = document.querySelector('[data-form-button]')
 
-    const concluirTarefa = (evento) => {
-        const btnClicado = evento.target
-        const tarefaCompleta = btnClicado.parentElement
-        tarefaCompleta.classList.toggle('done')
-    }
+novaTarefa.addEventListener('click', handleNovoItem)
 
-    const BotaoExcluir = ()=>{
-        const botaoExcluir = document.createElement('button')
-        botaoExcluir.innerText = 'Excluir'
-        botaoExcluir.classList.add('check-button')
-        botaoExcluir.addEventListener('click', excluirTarefa)
-        return botaoExcluir
-    }
-
-    const excluirTarefa = (evento)=>{
-        const btnClicado = evento.target
-        const tarefaApagar = btnClicado.parentElement
-        tarefaApagar.remove()
-    }
-})()
 
 
 
