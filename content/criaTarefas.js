@@ -1,8 +1,9 @@
-import BotaoExcluir from './content/excluirTarefa.js'
-import BotaoConcluir from './content/concluirTarefa.js'
+import BotaoExcluir from './excluirTarefa.js'
+import BotaoConcluir from './concluirTarefa.js'
 
 const handleNovoItem = (evento)=>{
     evento.preventDefault()
+    const tarefas = JSON.parse( localStorage.getItem('tarefas')) || []
     const lista = document.querySelector('[data-list]')
     const input = document.querySelector('[data-form-input]')
     const valor = input.value
@@ -14,13 +15,17 @@ const handleNovoItem = (evento)=>{
         valor,
         dataTarefa
     }
-    const criaTarefa = criarTarefa(dados)
+
+    const tarefasAtualizadas = [...tarefas, dados]
+    const criaTarefa = Tarefa(dados)
+
+    localStorage.setItem("tarefas", JSON.stringify(tarefasAtualizadas))
     lista.appendChild(criaTarefa)
     input.value = " "
 
 }
 
-const criarTarefa = ({valor, dataTarefa}) => {
+const Tarefa = ({valor, dataTarefa}) => {
     const tarefa = document.createElement('li')
     tarefa.classList.add('task')
     const conteudo = `<p class="content">${dataTarefa} ${valor}</p>`
@@ -29,12 +34,5 @@ const criarTarefa = ({valor, dataTarefa}) => {
     tarefa.appendChild(BotaoExcluir())
     return tarefa
 }
-const novaTarefa = document.querySelector('[data-form-button]')
 
-novaTarefa.addEventListener('click', handleNovoItem)
-
-
-
-
-
-
+export default handleNovoItem
