@@ -1,10 +1,10 @@
 import BotaoExcluir from './excluirTarefa.js'
 import BotaoConcluir from './concluirTarefa.js'
+import {carregaTarefa} from "./carregaTarefa.js";
 
-const handleNovoItem = (evento)=>{
+export const handleNovoItem = (evento)=>{
     evento.preventDefault()
     const tarefas = JSON.parse( localStorage.getItem('tarefas')) || []
-    const lista = document.querySelector('[data-list]')
     const input = document.querySelector('[data-form-input]')
     const valor = input.value
     const calendario = document.querySelector('[data-form-date]')
@@ -17,15 +17,15 @@ const handleNovoItem = (evento)=>{
     }
 
     const tarefasAtualizadas = [...tarefas, dados]
-    const criaTarefa = Tarefa(dados)
 
     localStorage.setItem("tarefas", JSON.stringify(tarefasAtualizadas))
-    lista.appendChild(criaTarefa)
+
     input.value = " "
+    carregaTarefa()
 
 }
 
-const Tarefa = ({valor, dataTarefa}) => {
+export const Tarefa = ({valor, dataTarefa}) => {
     const tarefa = document.createElement('li')
     tarefa.classList.add('task')
     const conteudo = `<p class="content">${dataTarefa} ${valor}</p>`
@@ -35,4 +35,3 @@ const Tarefa = ({valor, dataTarefa}) => {
     return tarefa
 }
 
-export default handleNovoItem
