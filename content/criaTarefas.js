@@ -9,11 +9,14 @@ export const handleNovoItem = (evento)=>{
     const valor = input.value
     const calendario = document.querySelector('[data-form-date]')
     const data = moment(calendario.value)
-    const dataTarefa = (data.format('DD / MM / YYYY HH:mm' ))
-
+    const dataTarefa = (data.format('DD/MM/YYYY ' ))
+    const concluida = false
+    const horario = data.format('HH:mm')
     const dados = {
         valor,
-        dataTarefa
+        dataTarefa,
+        horario,
+        concluida
     }
 
     const tarefasAtualizadas = [...tarefas, dados]
@@ -25,13 +28,17 @@ export const handleNovoItem = (evento)=>{
 
 }
 
-export const Tarefa = ({valor, dataTarefa}) => {
+export const Tarefa = ({valor, horario, concluida}, id) => {
     const tarefa = document.createElement('li')
+    if (concluida){
+        tarefa.classList.add('done')
+    }
     tarefa.classList.add('task')
-    const conteudo = `<p class="content">${dataTarefa} ${valor}</p>`
-    tarefa.innerHTML = conteudo
-    tarefa.appendChild(BotaoConcluir())
-    tarefa.appendChild(BotaoExcluir())
+
+    tarefa.innerHTML = `<p class="content">${horario} - ${valor}</p>`
+
+    tarefa.appendChild(BotaoConcluir(carregaTarefa,id))
+    tarefa.appendChild(BotaoExcluir(carregaTarefa,id))
     return tarefa
 }
 
